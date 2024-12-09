@@ -1,0 +1,29 @@
+1:install maven
+2: do -> mvn clean package
+3 : java -jar "filename"..
+now the program is runing !
+put it in s3  -chtay form the terminal -
+creat ec2 instane :
+    downlaod to it :
+        1 ) java
+        2) aws-cli
+now creat image form that insatnce
+
+
+creat instance from image :
+
+private static String generateUserDataScript(String accessKeyId, String secretAccessKey, String sessionToken) {
+        return "#!/bin/bash\n" +
+                "mkdir -p ~/.aws\n" +
+                "cat <<EOL > ~/.aws/credentials\n" +
+                "[default]\n" +
+                "aws_access_key_id=" + accessKeyId + "\n" +
+                "aws_secret_access_key=" + secretAccessKey + "\n" +
+                "aws_session_token=" + sessionToken + "\n" +
+                "EOL\n" +
+                "chmod 600 ~/.aws/credentials\n" +
+                "cd ~\n" +
+                "aws s3 cp s3://workeroutput/LocalApp-1.0-SNAPSHOT.jar ./LocalApp-1.0-SNAPSHOT.jar\n" +
+                "java -jar LocalApp-1.0-SNAPSHOT.jar\n";
+    }
+
