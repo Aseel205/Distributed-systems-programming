@@ -25,14 +25,18 @@ Pre-configured with:
 ## How to Run the Project
 1. Create the JAR files using `mvn clean package`.
 2. Upload the JAR files to S3.
-      - Configure AWS CLI:
-      aws configure (this will ask you for the credentials)
-      - Create an S3 Bucket  (in this case "aseeljarfiles " was our bucketName ) :
-      aws s3 mb s3://aseeljarfiles
-      - Upload the JAR Files (using the absolute path , the path will chnage from machine to other ) :
-      aws s3 cp "C:\Users\aseel\OneDrive\Desktop\mevazrot\Manager\target\A.zip" s3://aseeljarfiles/
-      aws s3 cp "C:\Users\aseel\OneDrive\Desktop\mevazrot\DSP_WORKER 2\target\Hmza_APP-1.0-SNAPSHOT.zip" s3://aseeljarfiles/
-
+	- Configure AWS CLI:
+		```bash
+ 		aws configure
+ 	(this will ask you for the credentials)
+	- Create an S3 Bucket  (in this case "aseeljarfiles " was our bucketName ) :
+		```bash
+ 		aws s3 mb s3://aseeljarfiles 
+	- Upload the JAR Files (using the absolute path, the path will change from machine to other) :
+  		```bash
+ 	 	aws s3 cp "C:\Users\aseel\OneDrive\Desktop\mevazrot\Manager\target\A.zip" s3://aseeljarfiles/
+   
+  		aws s3 cp "C:\Users\aseel\OneDrive\Desktop\mevazrot\DSP_WORKER 2\target\Hmza_APP-1.0-SNAPSHOT.zip" s3://aseeljarfiles/
 
 4. Activate the application using:  
    ```bash
