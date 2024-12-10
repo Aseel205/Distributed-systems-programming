@@ -11,7 +11,7 @@
 
 AWS EC2 Image for Java and AWS Tools.
 
-AMI ID: ami-0c603f038cd67eb7b.
+AMI ID: ami-0829e00d96164fbc9.
 
 Pre-configured with:
 
