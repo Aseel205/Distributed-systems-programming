@@ -1,0 +1,15 @@
+to do :
+step 1 :
+step 2 :
+step 3 <C0,value> :
+step4  final result :
+install hadoop :
+
+update the main file  :
+
+
+
+
+
+
+
