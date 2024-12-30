@@ -1,0 +1,18 @@
+/// first output
+
+apple pie recipe	0.20285645
+banana smoothie recipe	0.22762066
+chocolate chip cookies	0.24245979
+lemon tart recipe	0.25705588
+pumpkin spice latte	0.19243288
+strawberry shortcake dessert	0.17509726
+
+
+
+seconed output :
+
+banana smoothie recipe	0.21252447
+chocolate chip cookies	0.2254287
+lemon tart recipe	0.2414831
+pumpkin spice latte	0.17958835
+strawberry shortcake dessert	0.15875213

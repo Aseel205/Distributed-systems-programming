@@ -1,0 +1,5 @@
+apple     2010    100    25
+banana     2011    90     20
+chocolate     2012    120    30
+pumpkin     2013    110    28
+lemon     2014    95     22

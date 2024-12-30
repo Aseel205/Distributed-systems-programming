@@ -1,0 +1,10 @@
+chocolate chip cookies $   0,0,35,0,250,150
+pumpkin spice latte $    0,25,15,0,150,80
+lemon tart recipe $   0,0,30,0,180,120
+banana smoothie recipe $    0,0,25,0,220,110
+strawberry shortcake dessert $   0,0,10,0,140,60
+chocolate chip cookies $   70,50,35,0,0,0
+pumpkin spice latte $   40,25,15,0,0,0
+lemon tart recipe $   60,40,30,0,0,0
+banana smoothie recipe $    55,35,25,0,0,0
+strawberry shortcake dessert $    45,20,10,0,0,0
