@@ -49,9 +49,9 @@ public class Step3 {
 
 
     // there is no need for  PartitionerClass
-    public static class PartitionerClass extends Partitioner<Text, IntWritable> {
+    public static class PartitionerClass extends Partitioner<Text, Text> {
         @Override
-        public int getPartition(Text key, IntWritable value, int numPartitions) {
+        public int getPartition(Text key, Text value, int numPartitions) {
             return key.hashCode() % numPartitions;
         }
     }
@@ -65,6 +65,10 @@ public class Step3 {
                 sum += Integer.parseInt(value.toString());
             }
             context.write(key, new Text(sum + ""));
+            Configuration conf = new Configuration();
+            conf.set("C0", sum+"");  // Set the value of wordsCount as "C0" in the configuration
+
+
         }
     }
 
@@ -92,9 +96,8 @@ public class Step3 {
         job.setOutputValueClass(Text.class);  // Final output value is IntWritable
 
 
-        // Define input and output paths
-        FileInputFormat.addInputPath(job, new Path("s3://jars123123123/step3_input.txt"));
-        FileOutputFormat.setOutputPath(job, new Path("s3://jars123123123/step3_output.txt"));
+        FileInputFormat.addInputPath(job, new Path(args[1]));
+        FileOutputFormat.setOutputPath(job, new Path(args[3]));
 
         // Wait for the job to complete
         System.exit(job.waitForCompletion(true) ? 0 : 1);

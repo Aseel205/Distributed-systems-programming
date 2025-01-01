@@ -1,19 +1,5 @@
-apple pie recipe    2010    100    25
-banana bread recipe    2011    90     20
-chocolate cake recipe    2012    120    30
-pumpkin pie recipe    2013    110    28
-lemon cake recipe    2014    95     22
-
-
-
-
-                        <* * B>                 <* B C>
-String resultValue = currentFirstParam + "," + currentSecondParam + "," + sum + ",0,0,0,";
-
-
-
-pumpkin pie recipe	515,210,110,0,0,0
-apple pie recipe	515,210,100,0,0,0
-lemon cake recipe	515,215,95,0,0,0
-chocolate cake recipe	515,215,120,0,0,0
-banana bread recipe	515,90,90,0,0,0
+pumpkin pie recipe $	515,210,110,0,0,0
+apple pie recipe $	515,210,100,0,0,0
+lemon cake recipe $	515,215,95,0,0,0
+chocolate cake recipe $	515,215,120,0,0,0
+banana bread recipe $	515,90,90,0,0,0

@@ -1,0 +1,38 @@
+1.Configure AWS CLI:
+aws configure (this will ask you for the credentials)
+
+2.Create an S3 Bucket  (in this case "aseeljarfiles " was our bucketName ) :
+aws s3 mb s3://aseeljarfiles
+
+3.Upload the JAR Files (using the absolute path , the path will chnage from machine to other ) :
+aws s3 cp "C:\Users\aseel\OneDrive\Desktop\mevazrot\Manager\target\A.zip" s3://aseeljarfiles/
+aws s3 cp "C:\Users\aseel\OneDrive\Desktop\mevazrot\DSP_WORKER 2\target\Hmza_APP-1.0-SNAPSHOT.zip" s3://aseeljarfiles/
+
+4.Verify the Upload:
+aws s3 ls s3://aseeljarfiles/
+
+
+
+
+
+// How much time for input1 and input2
+
+
+Step 1: Configure AWS CLI
+Run the aws configure command. This will prompt you to enter your AWS credentials, region, and output format.
+
+Step 2: Create an S3 Bucket
+To create a bucket, use the following command:
+aws s3 mb s3://aseeljarfiles
+In this case, aseeljarfiles is the name of the bucket.
+
+Step 3: Upload the JAR Files
+To upload your JAR files to the bucket, use the absolute path for each file. For example:
+Upload the file A.zip:
+aws s3 cp "C:\Users\aseel\OneDrive\Desktop\mevazrot\Manager\target\A.zip" s3://aseeljarfiles/
+Upload the file Hmza_APP-1.0-SNAPSHOT.zip:
+aws s3 cp "C:\Users\aseel\OneDrive\Desktop\mevazrot\DSP_WORKER 2\target\Hmza_APP-1.0-SNAPSHOT.zip" s3://aseeljarfiles/
+
+Step 4: Verify the Upload
+To confirm the files were uploaded successfully, list the contents of the bucket using:
+aws s3 ls s3://aseeljarfiles/

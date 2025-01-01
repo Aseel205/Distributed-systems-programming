@@ -92,12 +92,12 @@ public class Step1 {
                 Text Value = new Text(words[4]);
 
                 // Output in the same format as before, which is just ngram and match count
-                context.write(new Text("* " + firstWord +  " *" + " $"), Value);
-                context.write(new Text("* "+  secondWord +" *" + " $"), Value);
-                context.write(new Text("* " + thirdWord + " *" + " $"), Value);
-                context.write(new Text(firstWord +  " "+ secondWord + " " + "*" + " $"), Value);
-                context.write(new Text(secondWord + " " + thirdWord+ " " +  "*" + " $"), Value);
-                context.write(new Text(firstWord + " "+  secondWord + " "+  thirdWord + " $"), Value);
+                context.write(new Text("* " + firstWord +  " *" ), Value);
+                context.write(new Text("* "+  secondWord +" *" ), Value);
+                context.write(new Text("* " + thirdWord + " *" ), Value);
+                context.write(new Text(firstWord +  " "+ secondWord + " " + "*" ), Value);
+                context.write(new Text(secondWord + " " + thirdWord+ " " +  "*" ), Value);
+                context.write(new Text(firstWord + " "+  secondWord + " "+  thirdWord ), Value);
             }
         }
 
@@ -132,9 +132,9 @@ public class Step1 {
 
 
     //Partition
-    public static class PartitionerClass extends Partitioner<Text, IntWritable> {
+    public static class PartitionerClass extends Partitioner<Text, Text> {
         @Override
-        public int getPartition(Text key, IntWritable value, int numPartitions) {
+        public int getPartition(Text key, Text value, int numPartitions) {
             String secondWord = TextUtils.getSecondWord(key);
             return (secondWord.hashCode() & Integer.MAX_VALUE) % numPartitions;
 
@@ -218,7 +218,7 @@ public class Step1 {
             // Case <A,B,C>
             else {
                 String resultValue = "0,0," + sum + ",0," + currentFirstParam + "," + currentSecondParam;
-                context.write(key, new Text( resultValue));
+                context.write(new Text(key + " $"), new Text( resultValue));
             }
         }
     }
@@ -278,8 +278,8 @@ public class Step1 {
 
 
         // Define input and output paths
-        FileInputFormat.addInputPath(job, new Path("s3://jars123123123/step1_input.txt"));
-        FileOutputFormat.setOutputPath(job, new Path("s3://jars123123123/step1_output.txt"));
+        FileInputFormat.addInputPath(job, new Path(args[1]));
+        FileOutputFormat.setOutputPath(job, new Path(args[3]));
 
         // Wait for the job to complete
         System.exit(job.waitForCompletion(true) ? 0 : 1);

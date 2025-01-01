@@ -24,11 +24,11 @@ public class Step4 {
 
 
 
-    public static class MapperClass extends Mapper<LongWritable, Text, Text, Text> {
+    public static class MapperClass extends Mapper<LongWritable , Text, Text, Text> {
 
 
 
-        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        public void map(LongWritable  key, Text value, Context context) throws IOException, InterruptedException {
             // Convert the input line to string
             String line = value.toString();
 
@@ -45,13 +45,12 @@ public class Step4 {
     }
 
 
-
-        public static class PartitionerClass extends Partitioner<Text, IntWritable> {
-            @Override
-            public int getPartition(Text key, IntWritable value, int numPartitions) {
-                return key.hashCode() % numPartitions;
-            }
+    public static class PartitionerClass extends Partitioner<Text, Text> {
+        @Override
+        public int getPartition(Text key, Text value, int numPartitions) {
+            return Math.abs(key.hashCode() % numPartitions);
         }
+    }
 
     public static class ReducerClass extends Reducer<Text, Text, Text, Text> {
 
@@ -99,9 +98,26 @@ public class Step4 {
             }
 
             private String computeProbability(int C0, int C1, int C2, int N1, int N2, int N3) {
+
+                if(C0 == 0 )
+                    throw new IllegalArgumentException("C0 must be non-zero.");
+
+
+                if (C1 == 0)
+                    throw new IllegalArgumentException("C1 must be non-zero.");
+
+
+                if (C2 == 0)
+                    throw new IllegalArgumentException("C2 must be non-zero.");
+
+
+
+        /*
                 if (C0 == 0 || C1 == 0 || C2 == 0) {
                     throw new IllegalArgumentException("C0, C1, and C2 must be non-zero.");
                 }
+
+         */
 
                 float k2 = (float) (Math.log(N2 + 1) + 1) / (float) (Math.log(N2 + 1) + 2);
                 float k3 = (float) (Math.log(N3 + 1) + 1) / (float) (Math.log(N3 + 1) + 2);
@@ -122,13 +138,13 @@ public class Step4 {
         System.out.println(args.length > 0 ? args[0] : "no args");
 
         // Extract the number from Step 3 output (e.g., wordsCount)
-        String wordsCount = args[3];
+  //      String wordsCount = args[4];
 
         // Remove the square brackets and any surrounding whitespace
  //       wordsCount = wordsCount.replaceAll("[\\[\\]]", "").trim();
 
         Configuration conf = new Configuration();
-        conf.set("C0", wordsCount);  // Set the value of wordsCount as "C0" in the configuration
+    //    conf.set("C0", wordsCount);  // Set the value of wordsCount as "C0" in the configuration
 
 
         Job job = Job.getInstance(conf, "step4 Count");
@@ -146,14 +162,11 @@ public class Step4 {
         job.setOutputKeyClass(Text.class);  // Final output key is Text
         job.setOutputValueClass(Text.class);  // Final output value is IntWritable
 
-   //     FileInputFormat.addInputPath(job, new Path("s3://jars123123123/step4_input.txt")) ;
-     //   FileOutputFormat.setOutputPath(job,new Path ("s3://jars123123123/step4_output.txt"));
-
-
 
         // Define input and output paths
         FileInputFormat.addInputPath(job, new Path(args[1]));
-        FileOutputFormat.setOutputPath(job, new Path(args[2]));
+        FileInputFormat.addInputPath(job, new Path(args[2]));
+        FileOutputFormat.setOutputPath(job, new Path(args[3]));
 
         // Wait for the job to complete
         System.exit(job.waitForCompletion(true) ? 0 : 1);

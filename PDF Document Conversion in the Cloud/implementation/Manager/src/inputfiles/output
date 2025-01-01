@@ -1,0 +1,14 @@
+1 remove file from s3
+add line to s3
+
+we have to chnage the
+input
+working
+
+output
+
+Buckets :
+1 :  bucket for the applaication input =   applicaation ID
+
+2 : bucket for the hamza (converted files ) bucketResultsname  = ""  Aseel will creat this
+3: bucket for the summury files = SummaryFiles_BucketName = "results123456789"  :
