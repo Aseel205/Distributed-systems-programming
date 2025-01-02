@@ -48,6 +48,7 @@ public  class Step2 {
                     "א"
             };
 
+
             // Add stop words to the HashSet
             for (String word : stopWordsArray) {
                 stopWords.add(word);
@@ -64,10 +65,9 @@ public  class Step2 {
             String word3 = tokens[2];  // "מהר"
             String year = tokens[3];   // "2024"
             String count1 = tokens[4]; // "50"
-            String count2 = tokens[5]; // "10"
 
             // Return the values in the desired format
-            return new String[]{word1, word2, word3, year, count1, count2};
+            return new String[]{word1, word2, word3, year, count1};
         }
 
 

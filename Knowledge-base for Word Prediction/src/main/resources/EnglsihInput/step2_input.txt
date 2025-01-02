@@ -1,0 +1,15 @@
+to be or    1990    1000    150
+be or of    1990    1200    160
+or of the    1990    1100    140
+of the people    1985    1400    180
+the people in    1985    1300    170
+people in the    1985    1000    130
+in the world    2000    1500    200
+the world United    2000    1200    180
+world United States    2005    1100    170
+United States of    2005    1000    160
+States of a    1995    1400    190
+of a long    1995    1200    170
+a long time    1995    1100    160
+long time at    2010    1300    180
+time at same    2010    1200    170

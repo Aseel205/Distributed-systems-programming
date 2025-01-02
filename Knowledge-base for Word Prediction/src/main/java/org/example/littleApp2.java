@@ -64,7 +64,6 @@ public class littleApp2 {
                 .withRegion("us-east-1")
                 .build();
 
-        Random rand = new Random();
 
         // Step 1
         StepConfig stepConfig1 = createStepConfig("Step1", step1_jar, step1_2Input, " ", step1_output, "Step1" );
@@ -93,9 +92,15 @@ public class littleApp2 {
 
         System.out.println("[INFO] Setting up job flow");
         RunJobFlowRequest runFlowRequest = new RunJobFlowRequest()
-                .withName( "Hamza and Aseel EMR")
+                .withName( "all steps")
                 .withInstances(instances)
-                .withSteps(stepConfig1, stepConfig2,stepConfig3, stepConfig4)
+               //  .withSteps(stepConfig1)
+                //     .withSteps (stepConfig2)
+                //     .withSteps(stepConfig3)
+                //    .withSteps(stepConfig4)
+
+                .withSteps(stepConfig1, stepConfig2, stepConfig3, stepConfig4)
+
                 .withLogUri("s3://" + bucketForJars + "/logs/")
                 .withServiceRole("EMR_DefaultRole")
                 .withJobFlowRole("EMR_EC2_DefaultRole")

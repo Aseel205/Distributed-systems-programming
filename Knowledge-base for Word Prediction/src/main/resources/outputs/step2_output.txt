@@ -1,5 +1,38 @@
-pumpkin pie recipe $	515,210,110,0,0,0
-apple pie recipe $	515,210,100,0,0,0
-lemon cake recipe $	515,215,95,0,0,0
-chocolate cake recipe $	515,215,120,0,0,0
-banana bread recipe $	515,90,90,0,0,0
+to be or    1990    1000    150
+be or of    1990    1200    160
+or of the    1990    1100    140
+of the people    1985    1400    180
+the people in    1985    1300    170
+people in the    1985    1000    130
+in the world    2000    1500    200
+the world United    2000    1200    180
+world United States    2005    1100    170
+United States of    2005    1000    160
+States of a    1995    1400    190
+of a long    1995    1200    170
+a long time    1995    1100    160
+long time at    2010    1300    180
+time at same    2010    1200    170
+
+
+
+
+
+
+to be or $	3300,2200,1000,0,0,0
+the people in $	3800,2300,1300,0,0,0
+world United States $	3500,2100,1100,0,0,0
+a long time $	3600,2400,1100,0,0,0
+or of the $	7500,2500,1100,0,0,0
+people in the $	7500,2500,1000,0,0,0
+in the world $	3800,2700,1500,0,0,0
+time at same $	1200,1200,1200,0,0,0
+of the people $	3700,2700,1400,0,0,0
+of a long $	3600,2300,1200,0,0,0
+States of a $	3700,2600,1400,0,0,0
+be or of $	7300,2300,1200,0,0,0
+United States of $	7300,2400,1000,0,0,0
+long time at $	2500,2500,1300,0,0,0
+the world United $	3300,2300,1200,0,0,0
+be or of $	0,0,1200,0,3300,2200
+of a long $	0,0,1200,0,3700,2600

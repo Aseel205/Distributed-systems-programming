@@ -1,282 +1,40 @@
-banana bread recipe	0.21825375
-chocolate cake recipe	0.2318923
-lemon cake recipe	0.24739327
-pumpkin pie recipe	0.18446308
+step4 by itself
+
+be or of	0.554539
+in the world	0.5704724
+people in the	0.4526096
+time at same	0.47424278
+the people in	0.48995283
+the world United	0.45542997
+States of a	0.55499715
+long time at	0.5507151
+of a long	0.47227016
+of the people	0.5345751
+or of the	0.45960417
+world United States	0.48863715
+United States of	0.49213487
+a long time	0.4917606
+to be or	0.9885575
 
 
 
+step4pipeline :
+be or of	0.554539
+in the world	0.5704724
+people in the	0.4526096
+time at same	0.47424278
+the people in	0.48995283
+the world United	0.45542997
+States of a	0.55499715
+long time at	0.5507151
+of a long	0.47227016
+of the people	0.5345751
+or of the	0.45960417
+world United States	0.48863715
+United States of	0.49213487
+a long time	0.4917606
+to be or	0.9885575
 
-the last error :
-Error: java.lang.IllegalArgumentException: C0 not provided in the job configuration!
-	at org.example.Step4$ReducerClass.setup(Step4.java:64)
-	at org.apache.hadoop.mapreduce.Reducer.run(Reducer.java:168)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:635)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
 
-Error: java.lang.IllegalArgumentException: C0 not provided in the job configuration!
-	at org.example.Step4$ReducerClass.setup(Step4.java:64)
-	at org.apache.hadoop.mapreduce.Reducer.run(Reducer.java:168)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:635)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
 
-Error: java.lang.IllegalArgumentException: C0 not provided in the job configuration!
-	at org.example.Step4$ReducerClass.setup(Step4.java:64)
-	at org.apache.hadoop.mapreduce.Reducer.run(Reducer.java:168)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:635)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Container killed by the ApplicationMaster.
-Container killed on request. Exit code is 143
-Container exited with a non-zero exit code 143
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00000
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Container killed by the ApplicationMaster.
-Container killed on request. Exit code is 143
-Container exited with a non-zero exit code 143
-
-Error: java.lang.IllegalArgumentException: C0 not provided in the job configuration!
-	at org.example.Step4$ReducerClass.setup(Step4.java:64)
-	at org.apache.hadoop.mapreduce.Reducer.run(Reducer.java:168)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:635)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Error: java.lang.IllegalArgumentException: C0 not provided in the job configuration!
-	at org.example.Step4$ReducerClass.setup(Step4.java:64)
-	at org.apache.hadoop.mapreduce.Reducer.run(Reducer.java:168)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:635)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Error: java.lang.IllegalArgumentException: C0 not provided in the job configuration!
-	at org.example.Step4$ReducerClass.setup(Step4.java:64)
-	at org.apache.hadoop.mapreduce.Reducer.run(Reducer.java:168)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:635)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Error: java.lang.IllegalArgumentException: C0 not provided in the job configuration!
-	at org.example.Step4$ReducerClass.setup(Step4.java:64)
-	at org.apache.hadoop.mapreduce.Reducer.run(Reducer.java:168)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:635)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00006
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Container killed by the ApplicationMaster.
-Container killed on request. Exit code is 143
-Container exited with a non-zero exit code 143
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00002
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Container killed by the ApplicationMaster.
-Container killed on request. Exit code is 143
-Container exited with a non-zero exit code 143
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00000
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00001
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00005
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00003
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Container killed by the ApplicationMaster.
-Container killed on request. Exit code is 143
-Container exited with a non-zero exit code 143
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00004
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00004
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00006
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
-
-Error: java.io.IOException: File already exists:s3://jars123123123/step4_output.txt/part-r-00002
-	at com.amazon.ws.emr.hadoop.fs.s3n.S3NativeFileSystem.create(S3NativeFileSystem.java:625)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:915)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:896)
-	at org.apache.hadoop.fs.FileSystem.create(FileSystem.java:793)
-	at com.amazon.ws.emr.hadoop.fs.EmrFileSystem.create(EmrFileSystem.java:176)
-	at org.apache.hadoop.mapreduce.lib.output.TextOutputFormat.getRecordWriter(TextOutputFormat.java:132)
-	at org.apache.hadoop.mapred.ReduceTask$NewTrackingRecordWriter.<init>(ReduceTask.java:549)
-	at org.apache.hadoop.mapred.ReduceTask.runNewReducer(ReduceTask.java:622)
-	at org.apache.hadoop.mapred.ReduceTask.run(ReduceTask.java:390)
-	at org.apache.hadoop.mapred.YarnChild$2.run(YarnChild.java:164)
-	at java.security.AccessController.doPrivileged(Native Method)
-	at javax.security.auth.Subject.doAs(Subject.java:422)
-	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:1698)
-	at org.apache.hadoop.mapred.YarnChild.main(YarnChild.java:158)
 

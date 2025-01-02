@@ -21,8 +21,8 @@ import org.apache.hadoop.io.Text;
 
 import java.util.HashSet;
 
-
-public class Step1 {
+// I will check if I will implement this step ...  Aseel
+public class step1Ameer {
 
     public static class MapperClass extends Mapper<LongWritable, Text, Text, Text> {
 
@@ -47,7 +47,7 @@ public class Step1 {
                     "שכל", "שאר", "ש", "ר", "פעמים", "נעשה", "ן", "ממנו", "מלא", "מזה", "ם",
                     "לפי", "ל", "כמו", "כבר", "כ", "זו", "ומה", "ולכל", "ובין", "ואין", "הן",
                     "היתה", "הא", "ה", "בל", "בין", "בזה", "ב", "אף", "אי", "אותה", "או", "אבל",
-                     "א"
+                    "א"
             };
 
             // Add stop words to the HashSet
@@ -67,9 +67,10 @@ public class Step1 {
             String word3 =  tokens[2];  // "מהר"
             String year =   tokens[3];   // "2024"
             String count1 = tokens[4]; // "50"
+            String count2 = tokens[5]; // "10"
             // no need for count 3
             // Return the values in the desired format
-            return new String[] { word1, word2, word3, year, count1};
+            return new String[] { word1, word2, word3, year, count1, count2 };
         }
 
         @Override
@@ -80,25 +81,26 @@ public class Step1 {
             // Parse the first, second, and third words from the ngram
             String[] words = extractValues(value.toString());
 
-                String firstWord =  words[0];
-                String secondWord = words[1];
-                String thirdWord =  words[2];
+            String firstWord =  words[0];
+            String secondWord = words[1];
+            String thirdWord =  words[2];
 
 
-                if(stopWords.contains(firstWord) || stopWords.contains(secondWord) || stopWords.contains(thirdWord))
-                    return  ;
+            if(stopWords.contains(firstWord) || stopWords.contains(secondWord) || stopWords.contains(thirdWord))
+                return  ;
 
-                Text Value = new Text(words[4]);
+            Text Value = new Text(  Integer.parseInt(words[4]) * 3 + ""  );
 
-                // Output in the same format as before, which is just ngram and match count
-                context.write(new Text("* " + firstWord +  " *" ), Value);
-                context.write(new Text("* "+  secondWord +" *" ), Value);
-                context.write(new Text("* " + thirdWord + " *" ), Value);
-                context.write(new Text(firstWord +  " "+ secondWord + " " + "*" ), Value);
-                context.write(new Text(secondWord + " " + thirdWord+ " " +  "*" ), Value);
-                context.write(new Text(firstWord + " "+  secondWord + " "+  thirdWord ), Value);
-            }
+            // Output in the same format as before, which is just ngram and match count
+            context.write(new Text("* * *" ),Value );
+            context.write(new Text("* " + firstWord +  " *" ), Value);
+            context.write(new Text("* "+  secondWord +" *" ), Value);
+            context.write(new Text("* " + thirdWord + " *" ), Value);
+            context.write(new Text(firstWord +  " "+ secondWord + " " + "*" ), Value);
+            context.write(new Text(secondWord + " " + thirdWord+ " " +  "*" ), Value);
+            context.write(new Text(firstWord + " "+  secondWord + " "+  thirdWord ), Value);
         }
+    }
 
 
     public static class TextUtils {
@@ -247,7 +249,7 @@ public class Step1 {
         }
     }
 
-    
+
  */
 
 

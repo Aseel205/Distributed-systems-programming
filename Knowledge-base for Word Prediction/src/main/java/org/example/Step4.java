@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
@@ -19,6 +19,8 @@ import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import com.amazonaws.services.s3.model.*;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 
 public class Step4 {
 
@@ -52,23 +54,70 @@ public class Step4 {
         }
     }
 
+
     public static class ReducerClass extends Reducer<Text, Text, Text, Text> {
 
-        public static int C0;
+        public  static AmazonS3 S3;
+        public  static   int C0;
 
         @Override
-        protected void setup(Context context) throws IOException, InterruptedException {
+        protected void  setup(Context context) throws IOException, InterruptedException {
             super.setup(context);
-            String c0Value = context.getConfiguration().get("C0");
+
+            // Use the default AWS credentials provider (IAM role) for EMR
+            S3 = AmazonS3ClientBuilder.standard()
+                    .withCredentials(DefaultAWSCredentialsProviderChain.getInstance()) // Default credentials provider
+                    .withRegion("us-east-1") // Ensure this matches your bucket region
+                    .build();
+
+            // Extract the C0 value from Step 3 output stored in S3
+            String bucketName = "jars123123123"; // Replace with your actual bucket name
+            String c0Value = extractNumberFromStep3(bucketName, "step3_output"); // Replace with the actual file path
+
             if (c0Value == null) {
-                throw new IllegalArgumentException("C0 not provided in the job configuration!");
+                throw new IllegalArgumentException("C0 not provided in the Step 3 output!");
             }
+
             C0 = Integer.parseInt(c0Value);
             System.out.println("[INFO] C0 value retrieved in Reducer: " + C0);
         }
 
+        // Method to extract number from Step 3 output stored in S3
+        public  String extractNumberFromStep3(String bucketName, String outputDir) {
+            try {
+                // List all objects in the output directory
+                ObjectListing objectListing = S3.listObjects(bucketName, outputDir);
+                for (S3ObjectSummary summary : objectListing.getObjectSummaries()) {
+                    // Skip directories
+                    if (summary.getKey().endsWith("/")) {
+                        continue;
+                    }
 
-            @Override
+                    // Fetch each file
+                    S3Object object = S3.getObject(bucketName, summary.getKey());
+                    S3ObjectInputStream inputStream = object.getObjectContent();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+                    String line;
+                    // Read the file to find a non-empty line with a valid number
+                    while ((line = reader.readLine()) != null) {
+                        if (!line.isEmpty()) {
+                            String[] parts = line.split("\\s+");
+                            if (parts.length == 2) {
+                                String number = parts[1];
+                                System.out.println("[INFO] Extracted number: " + number);
+                                return number; // Return the number from the first valid file
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("[ERROR] Failed to parse Step 3 output: " + e.getMessage());
+            }
+            return null; // Return null if no valid number is found
+        }
+
+    @Override
             public void reduce(Text key, Iterable<Text> values, Context context)
                     throws IOException, InterruptedException {
 
@@ -137,15 +186,8 @@ public class Step4 {
         System.out.println("[DEBUG] STEP 4 started!");
         System.out.println(args.length > 0 ? args[0] : "no args");
 
-        // Extract the number from Step 3 output (e.g., wordsCount)
-  //      String wordsCount = args[4];
-
-        // Remove the square brackets and any surrounding whitespace
- //       wordsCount = wordsCount.replaceAll("[\\[\\]]", "").trim();
 
         Configuration conf = new Configuration();
-    //    conf.set("C0", wordsCount);  // Set the value of wordsCount as "C0" in the configuration
-
 
         Job job = Job.getInstance(conf, "step4 Count");
         job.setJarByClass(Step4.class);
