@@ -17,7 +17,9 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public  class Step2 {
 
@@ -55,37 +57,31 @@ public  class Step2 {
             }
         }
 
-        public static String[] extractValues(String input) {
-            // Split the input string by space
-            String[] tokens = input.split("\\s+");
 
-            // Extract the relevant parts
-            String word1 = tokens[0];  // "הכלב"
-            String word2 = tokens[1];  // "רץ"
-            String word3 = tokens[2];  // "מהר"
-            String year = tokens[3];   // "2024"
-            String count1 = tokens[4]; // "50"
-
-            // Return the values in the desired format
-            return new String[]{word1, word2, word3, year, count1};
-        }
 
 
         @Override
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
 
-            String[] words = extractValues(value.toString());
+            String[] splits = value.toString().split("\t");
+            if (splits.length < 4) {
+                return;
+            }
+            String n_gram = splits[0];
+            String count_s = splits[2];
+            String year_s = splits[1];
+            String[] word1_word2_word3 = n_gram.split(" ");
 
-            // Ensure the line has at least 4 fields (3-gram and match_count)
-            String firstWord = words[0];
-            String secondWord = words[1];
-            String thirdWord = words[2];
-            Text Value = new Text(words[4]);
+            String firstWord =  word1_word2_word3[0];
+            String secondWord = word1_word2_word3[1];
+            String thirdWord =  word1_word2_word3[2];
 
 
             if(stopWords.contains(firstWord) || stopWords.contains(secondWord) || stopWords.contains(thirdWord))
                 return  ;
+
+            Text Value = new Text(count_s);
 
 
             context.write(new Text("* * " + firstWord ), Value);
@@ -199,7 +195,7 @@ public  class Step2 {
                 currentFirstParam = sum;
             }
             // Case : <* B C>
-           else if (starCount == 1) {
+            else if (starCount == 1) {
                 currentSecondParam = sum;
             }
 
@@ -218,7 +214,7 @@ public  class Step2 {
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "Word Count");
         job.setJarByClass(Step2.class);  // here was error , mit was Step1 , I dont know  how ....
- 
+
         job.setMapperClass(Step2.MapperClass.class);     // mapper
         job.setPartitionerClass(Step2.PartitionerClass.class);  // partitioner
         job.setReducerClass(Step2.ReducerClass.class);          // reducer
@@ -234,6 +230,12 @@ public  class Step2 {
         // Set output key/value types for the final output (Reducer output)
         job.setOutputKeyClass(Text.class);  // Final output key is Text
         job.setOutputValueClass(Text.class);  // Final output value is IntWritable
+
+   //     job.setInputFormatClass(SequenceFileInputFormat.class);
+   //     job.setOutputFormatClass(TextOutputFormat.class);
+    //    SequenceFileInputFormat.addInputPath(job, new Path(args[1]));
+    //    FileOutputFormat.setOutputPath(job, new Path(args[3]));
+
 
 
         // Define input and output paths
