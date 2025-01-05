@@ -182,7 +182,7 @@ public class Step4 {
         }
 
     public static void main(String[] args) throws Exception {
-
+        System.out.println(" we are in the new Step4");
         System.out.println("[DEBUG] STEP 4 started!");
         System.out.println(args.length > 0 ? args[0] : "no args");
 
