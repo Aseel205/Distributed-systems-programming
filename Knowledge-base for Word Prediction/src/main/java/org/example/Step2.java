@@ -217,8 +217,8 @@ public  class Step2 {
 
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "Word Count");
-        job.setJarByClass(Step1.class);
-
+        job.setJarByClass(Step2.class);  // here was error , mit was Step1 , I dont know  how ....
+ 
         job.setMapperClass(Step2.MapperClass.class);     // mapper
         job.setPartitionerClass(Step2.PartitionerClass.class);  // partitioner
         job.setReducerClass(Step2.ReducerClass.class);          // reducer
