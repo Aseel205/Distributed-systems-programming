@@ -14,9 +14,11 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class Step3 {
 
@@ -74,17 +76,22 @@ public class Step3 {
 
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
-            String[] words = extractValues(value.toString());
+            String[] splits = value.toString().split("\t");
+            if (splits.length < 4) {
+                return;
+            }
+            String word = splits[0];
+            String count_s = splits[2];
+            String year_s = splits[1];
 
-            if(stopWords.contains(words[0]))
-                return  ;
 
-            Text matchCount = new Text(words[2]);
+            if(stopWords.contains(word))
+                return;
 
+            Text matchCount = new Text(count_s);
 
             // Write the  pair: <*,matchCount>
             context.write(new Text("*"), matchCount);
-
 
         }
     }
@@ -134,6 +141,12 @@ public class Step3 {
         // Set output key/value types for the final output (Reducer output)
         job.setOutputKeyClass(Text.class);  // Final output key is Text
         job.setOutputValueClass(Text.class);  // Final output value is IntWritable
+
+
+   //     job.setInputFormatClass(SequenceFileInputFormat.class);
+   //     job.setOutputFormatClass(TextOutputFormat.class);
+   //     SequenceFileInputFormat.addInputPath(job, new Path(args[1]));
+   //     FileOutputFormat.setOutputPath(job, new Path(args[3]));
 
 
         FileInputFormat.addInputPath(job, new Path(args[1]));
