@@ -9,6 +9,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.DataInput;
@@ -18,6 +19,7 @@ import java.io.DataOutput;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.util.HashSet;
 
@@ -47,7 +49,7 @@ public class Step1 {
                     "שכל", "שאר", "ש", "ר", "פעמים", "נעשה", "ן", "ממנו", "מלא", "מזה", "ם",
                     "לפי", "ל", "כמו", "כבר", "כ", "זו", "ומה", "ולכל", "ובין", "ואין", "הן",
                     "היתה", "הא", "ה", "בל", "בין", "בזה", "ב", "אף", "אי", "אותה", "או", "אבל",
-                     "א"
+                    "א"
             };
 
             // Add stop words to the HashSet
@@ -57,48 +59,41 @@ public class Step1 {
         }
 
 
-        public static String[] extractValues(String input) {
-            // Split the input string by space
-            String[] tokens = input.split("\\s+");
-
-            // Extract the relevant parts
-            String word1 =  tokens[0];  // "הכלב"
-            String word2 =  tokens[1];  // "רץ"
-            String word3 =  tokens[2];  // "מהר"
-            String year =   tokens[3];   // "2024"
-            String count1 = tokens[4]; // "50"
-            // no need for count 3
-            // Return the values in the desired format
-            return new String[] { word1, word2, word3, year, count1};
-        }
-
         @Override
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
 
-
-            // Parse the first, second, and third words from the ngram
-            String[] words = extractValues(value.toString());
-
-                String firstWord =  words[0];
-                String secondWord = words[1];
-                String thirdWord =  words[2];
-
-
-                if(stopWords.contains(firstWord) || stopWords.contains(secondWord) || stopWords.contains(thirdWord))
-                    return  ;
-
-                Text Value = new Text(words[4]);
-
-                // Output in the same format as before, which is just ngram and match count
-                context.write(new Text("* " + firstWord +  " *" ), Value);
-                context.write(new Text("* "+  secondWord +" *" ), Value);
-                context.write(new Text("* " + thirdWord + " *" ), Value);
-                context.write(new Text(firstWord +  " "+ secondWord + " " + "*" ), Value);
-                context.write(new Text(secondWord + " " + thirdWord+ " " +  "*" ), Value);
-                context.write(new Text(firstWord + " "+  secondWord + " "+  thirdWord ), Value);
+            String[] splits = value.toString().split("\t");
+            if (splits.length < 4) {
+                return;
             }
+            String n_gram = splits[0];
+            String count_s = splits[2];
+            String year_s = splits[1];
+            String[] word1_word2_word3 = n_gram.split(" ");
+
+
+
+
+            String firstWord =  word1_word2_word3[0];
+            String secondWord = word1_word2_word3[1];
+            String thirdWord =  word1_word2_word3[2];
+
+
+            if(stopWords.contains(firstWord) || stopWords.contains(secondWord) || stopWords.contains(thirdWord))
+                return  ;
+
+            Text Value = new Text(count_s);
+
+            // Output in the same format as before, which is just ngram and match count
+            context.write(new Text("* " + firstWord +  " *" ), Value);
+            context.write(new Text("* "+  secondWord +" *" ), Value);
+            context.write(new Text("* " + thirdWord + " *" ), Value);
+            context.write(new Text(firstWord +  " "+ secondWord + " " + "*" ), Value);
+            context.write(new Text(secondWord + " " + thirdWord+ " " +  "*" ), Value);
+            context.write(new Text(firstWord + " "+  secondWord + " "+  thirdWord ), Value);
         }
+    }
 
 
     public static class TextUtils {
@@ -222,33 +217,6 @@ public class Step1 {
         }
     }
 
-/*
-    public static class ReducerClass2 extends Reducer<Text,Text,Text,Text> {
-
-        private int currentFirstParam ;    //
-        private  int currentSecondParam ;  //
-
-
-
-        @Override
-        public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-            // Initialize temporary variables to store the first and second parameters
-            int value = 0;
-            int sum = 0;
-
-            Iterator<Text> iter = values.iterator();
-
-            while(iter.hasNext())
-                sum=sum+Integer.parseInt(iter.next().toString());
-
-
-                context.write(key, new Text( sum+""));
-
-        }
-    }
-
-    
- */
 
 
     public static void main(String[] args) throws Exception {
@@ -275,6 +243,13 @@ public class Step1 {
         job.setOutputKeyClass(Text.class);  // Final output key is Text
         job.setOutputValueClass(Text.class);  // Final output value is IntWritable
 
+   //     job.setInputFormatClass(SequenceFileInputFormat.class);
+   //     job.setOutputFormatClass(TextOutputFormat.class);     // I think this line will cause erros
+  //      SequenceFileInputFormat.addInputPath(job, new Path(args[1]));
+  //      FileOutputFormat.setOutputPath(job, new Path(args[3]));
+
+
+
 
         // Define input and output paths
         FileInputFormat.addInputPath(job, new Path(args[1]));
@@ -286,6 +261,3 @@ public class Step1 {
 
 
 }
-
-
-
