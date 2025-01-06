@@ -14,11 +14,13 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-public class Step3 {
+public class Step3Google {
 
 
     public static class MapperClass extends Mapper<LongWritable, Text, Text, Text> {
@@ -56,35 +58,24 @@ public class Step3 {
 
 
 
-        public static String[] extractValues(String input) {
-            // Split the input string by space
-            String[] tokens = input.split("\\s+");
-
-            // Extract the relevant parts
-            String word1 = tokens[0];  // "הכלב"
-            String year = tokens[1];   // "2024"
-            String count1 = tokens[2]; // "50"
-            String count2 = tokens[3]; // "10"
-
-            // Return the values in the desired format
-            return new String[]{word1, year, count1, count2};
-        }
-
-
 
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
-            String[] words = extractValues(value.toString());
+            String[] splits = value.toString().split("\t");
+            if (splits.length < 4) {
+                return;
+            }
+            String word = splits[0];
+            String count_s = splits[2];
 
-            if(stopWords.contains(words[0]))
-                return  ;
+            if(word.length()!=1 || stopWords.contains(word))
+                return ;
 
-            Text matchCount = new Text(words[2]);
 
+            Text matchCount = new Text(count_s);
 
             // Write the  pair: <*,matchCount>
             context.write(new Text("*"), matchCount);
-
 
         }
     }
@@ -97,6 +88,9 @@ public class Step3 {
             return key.hashCode() % numPartitions;
         }
     }
+
+
+
 
 
     public static class ReducerClass extends Reducer<Text, Text, Text, Text> {
@@ -119,13 +113,13 @@ public class Step3 {
 
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, " Step3");
-        job.setJarByClass(Step3.class);
+        job.setJarByClass(Step3Google.class);
 
-        job.setMapperClass(Step3.MapperClass.class);     // mapper
-        job.setPartitionerClass(Step3.PartitionerClass.class);  // partitioner
-        job.setReducerClass(Step3.ReducerClass.class);          // reducer
+        job.setMapperClass(Step3Google.MapperClass.class);     // mapper
+        job.setPartitionerClass(Step3Google.PartitionerClass.class);  // partitioner
+        job.setReducerClass(Step3Google.ReducerClass.class);          // reducer
 
-        job.setCombinerClass(Step3.ReducerClass.class); // Use reducer as combiner if you need it
+        job.setCombinerClass(Step3Google.ReducerClass.class); // Use reducer as combiner if you need it
 
         // Set output key/value types for the Mapper output
         job.setMapOutputKeyClass(Text.class);  // Mapper outputs NGramCompositeKey
@@ -135,9 +129,15 @@ public class Step3 {
         job.setOutputKeyClass(Text.class);  // Final output key is Text
         job.setOutputValueClass(Text.class);  // Final output value is IntWritable
 
+/*
+         job.setInputFormatClass(SequenceFileInputFormat.class);
+         job.setOutputFormatClass(TextOutputFormat.class);
+         SequenceFileInputFormat.addInputPath(job, new Path(args[1]));
+         FileOutputFormat.setOutputPath(job, new Path(args[3]));
+*/
 
-        FileInputFormat.addInputPath(job, new Path(args[1]));
-        FileOutputFormat.setOutputPath(job, new Path(args[3]));
+          FileInputFormat.addInputPath(job, new Path(args[1]));
+          FileOutputFormat.setOutputPath(job, new Path(args[3]));
 
         // Wait for the job to complete
         System.exit(job.waitForCompletion(true) ? 0 : 1);

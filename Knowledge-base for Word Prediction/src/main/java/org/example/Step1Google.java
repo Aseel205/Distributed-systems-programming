@@ -9,20 +9,20 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-import java.io.DataInput;
-import java.io.DataOutput;
 
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.util.HashSet;
 
-// I will check if I will implement this step ...  Aseel
-public class step1Ameer {
+
+public class Step1Google {
 
     public static class MapperClass extends Mapper<LongWritable, Text, Text, Text> {
 
@@ -57,42 +57,35 @@ public class step1Ameer {
         }
 
 
-        public static String[] extractValues(String input) {
-            // Split the input string by space
-            String[] tokens = input.split("\\s+");
-
-            // Extract the relevant parts
-            String word1 =  tokens[0];  // "הכלב"
-            String word2 =  tokens[1];  // "רץ"
-            String word3 =  tokens[2];  // "מהר"
-            String year =   tokens[3];   // "2024"
-            String count1 = tokens[4]; // "50"
-            String count2 = tokens[5]; // "10"
-            // no need for count 3
-            // Return the values in the desired format
-            return new String[] { word1, word2, word3, year, count1, count2 };
-        }
-
         @Override
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
+            String line = value.toString();
+            String[] splits = line.split("\t");
+            if (splits.length < 4) {
+                return;
+            }
+            String n_gram = splits[0];
+            String count_s = splits[2];
+            String[] word1_word2_word3 = n_gram.split("\\s+");
+
+            if(word1_word2_word3.length!=3) {
+                return;
+            }
 
 
-            // Parse the first, second, and third words from the ngram
-            String[] words = extractValues(value.toString());
-
-            String firstWord =  words[0];
-            String secondWord = words[1];
-            String thirdWord =  words[2];
+            String firstWord =  word1_word2_word3[0];
+            String secondWord = word1_word2_word3[1];
+            String thirdWord =  word1_word2_word3[2];
 
 
-            if(stopWords.contains(firstWord) || stopWords.contains(secondWord) || stopWords.contains(thirdWord))
-                return  ;
+            if(stopWords.contains(firstWord) || stopWords.contains(secondWord) || stopWords.contains(thirdWord)) {
+                return;
+            }
 
-            Text Value = new Text(  Integer.parseInt(words[4]) * 3 + ""  );
+            Text Value = new Text(count_s);
 
             // Output in the same format as before, which is just ngram and match count
-            context.write(new Text("* * *" ),Value );
             context.write(new Text("* " + firstWord +  " *" ), Value);
             context.write(new Text("* "+  secondWord +" *" ), Value);
             context.write(new Text("* " + thirdWord + " *" ), Value);
@@ -183,9 +176,20 @@ public class step1Ameer {
     }
 
 
+    public class SumCombiner extends Reducer<Text, Text, Text, Text> {
+        @Override
+        protected void reduce(Text key, Iterable<Text> values, Context context)
+                throws IOException, InterruptedException {
+            int sum = 0;
+            for (Text value : values) {
+                sum += Integer.parseInt(value.toString());
+            }
+            context.write(key, new Text(String.valueOf(sum)));
+        }
+    }
+
+
     // Reducer
-
-
     public static class ReducerClass extends Reducer<Text,Text,Text,Text> {
 
         private int currentFirstParam = 0;   //
@@ -224,33 +228,6 @@ public class step1Ameer {
         }
     }
 
-/*
-    public static class ReducerClass2 extends Reducer<Text,Text,Text,Text> {
-
-        private int currentFirstParam ;    //
-        private  int currentSecondParam ;  //
-
-
-
-        @Override
-        public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-            // Initialize temporary variables to store the first and second parameters
-            int value = 0;
-            int sum = 0;
-
-            Iterator<Text> iter = values.iterator();
-
-            while(iter.hasNext())
-                sum=sum+Integer.parseInt(iter.next().toString());
-
-
-                context.write(key, new Text( sum+""));
-
-        }
-    }
-
-
- */
 
 
     public static void main(String[] args) throws Exception {
@@ -259,15 +236,15 @@ public class step1Ameer {
 
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "Word Count");
-        job.setJarByClass(Step1.class);
+        job.setJarByClass(Step1Google.class);
 
-        job.setMapperClass(Step1.MapperClass.class);     // mapper
-        job.setPartitionerClass(Step1.PartitionerClass.class);  // partitioner
-        job.setReducerClass(Step1.ReducerClass.class);          // reducer
-        job.setGroupingComparatorClass(Step1.MultiKeyComparator.class);    // comparator
-        job.setSortComparatorClass(Step1.MultiKeyComparator.class);        //  another comparator
+        job.setMapperClass(Step1Google.MapperClass.class);     // mapper
+        job.setPartitionerClass(Step1Google.PartitionerClass.class);  // partitioner
+        job.setReducerClass(Step1Google.ReducerClass.class);          // reducer
+        job.setGroupingComparatorClass(Step1Google.MultiKeyComparator.class);    // comparator
+        job.setSortComparatorClass(Step1Google.MultiKeyComparator.class);        //  another comparator
 
-        // job.setCombinerClass(Step1.ReducerClass.class); // Use reducer as combiner if you need it
+        job.setCombinerClass(SumCombiner.class); // Use reducer as combiner if you need it
 
         // Set output key/value types for the Mapper output
         job.setMapOutputKeyClass(Text.class);  // Mapper outputs NGramCompositeKey
@@ -276,6 +253,13 @@ public class step1Ameer {
         // Set output key/value types for the final output (Reducer output)
         job.setOutputKeyClass(Text.class);  // Final output key is Text
         job.setOutputValueClass(Text.class);  // Final output value is IntWritable
+/*
+        job.setInputFormatClass(SequenceFileInputFormat.class);
+        job.setOutputFormatClass(TextOutputFormat.class);
+        FileInputFormat.addInputPath(job, new Path(args[1]));
+        FileOutputFormat.setOutputPath(job, new Path(args[3]));
+*/
+
 
 
         // Define input and output paths
@@ -288,6 +272,3 @@ public class step1Ameer {
 
 
 }
-
-
-

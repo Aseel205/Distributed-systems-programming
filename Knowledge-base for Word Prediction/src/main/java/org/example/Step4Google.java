@@ -3,6 +3,7 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Iterator;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -22,7 +23,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 
-public class Step4 {
+public class Step4Google {
 
 
 
@@ -50,9 +51,63 @@ public class Step4 {
     public static class PartitionerClass extends Partitioner<Text, Text> {
         @Override
         public int getPartition(Text key, Text value, int numPartitions) {
-            return Math.abs(key.hashCode() % numPartitions);
+            // Split the key into words
+            String[] words = key.toString().split("\\s+");
+
+            // Ensure there are at least two words
+            if (words.length < 2) {
+                return 0; // Default to partition 0 if key is invalid
+            }
+
+            // Extract the first two words
+            String firstTwoWords = words[0] + " " + words[1];
+
+            // Use the hash code of the first two words for partitioning
+            return Math.abs(firstTwoWords.hashCode() % numPartitions);
         }
     }
+
+    public static class MultiKeyComparator extends WritableComparator {
+        protected MultiKeyComparator() {
+            super(Text.class, true);
+        }
+
+        @Override
+        public int compare(WritableComparable a, WritableComparable b) {
+            Text key1 = (Text) a;
+            Text key2 = (Text) b;
+
+            // Compare the second word in reverse order
+            int secondWordComparison = compareWithStar(Step1Google.TextUtils.getSecondWord(key1), Step1Google.TextUtils.getSecondWord(key2));
+            if (secondWordComparison != 0) {
+                return -secondWordComparison; // Reverse the comparison
+            }
+
+            // Compare the first word in reverse order
+            int firstWordComparison = compareWithStar(Step1Google.TextUtils.getFirstWord(key1), Step1Google.TextUtils.getFirstWord(key2));
+            if (firstWordComparison != 0) {
+                return -firstWordComparison; // Reverse the comparison
+            }
+
+            // Compare the third word in reverse order
+            return -compareWithStar(Step1Google.TextUtils.getThirdWord(key1), Step1Google.TextUtils.getThirdWord(key2)); // Reverse the comparison
+        }
+
+        // Helper method to compare with "*" treated as the largest
+        private int compareWithStar(String word1, String word2) {
+            if (word1.equals("*") && !word2.equals("*")) {
+                return 1; // "*" is greater than any other word
+            } else if (!word1.equals("*") && word2.equals("*")) {
+                return -1; // "*" is greater than any other word
+            } else {
+                return word1.compareTo(word2); // Regular comparison for other words
+            }
+        }
+    }
+
+
+
+
 
 
     public static class ReducerClass extends Reducer<Text, Text, Text, Text> {
@@ -117,72 +172,74 @@ public class Step4 {
             return null; // Return null if no valid number is found
         }
 
-    @Override
-            public void reduce(Text key, Iterable<Text> values, Context context)
-                    throws IOException, InterruptedException {
+        @Override
+        public void reduce(Text key, Iterable<Text> values, Context context)
+                throws IOException, InterruptedException {
 
-                int C1 = 0, C2 = 0, N1 = 0, N2 = 0, N3 = 0;
+            int C1 = 0, C2 = 0, N1 = 0, N2 = 0, N3 = 0;
+            int counter = 0 ;
+            Iterator<Text> iter = values.iterator() ;
 
-                for (Text value : values) {
-                    String valueStr = value.toString();
+            while (iter.hasNext()) {
+                String valueStr = (iter.next()).toString();
 
-                    if (valueStr.charAt(0) == '0') {
-                        String[] tokens = valueStr.split(",");
-                        if (tokens.length == 6) {
-                            C1 = Integer.parseInt(tokens[4]);
-                            C2 = Integer.parseInt(tokens[5]);
-                        }
-                    } else {
-                        String[] tokens = valueStr.split(",");
-                        if (tokens.length == 6) {
-                            N1 = Integer.parseInt(tokens[0]);
-                            N2 = Integer.parseInt(tokens[1]);
-                            N3 = Integer.parseInt(tokens[2]);
-                        }
+                // in this case the combiner was activated
+                if (counter==0 && ! iter.hasNext()) {
+                    context.write(key, new Text(valueStr));
+                    break ;
+                }
+                // regular reduce
+               else if (valueStr.charAt(0) == '0') {
+                    String[] tokens = valueStr.split(",");
+                    if (tokens.length == 6) {
+                        C1 = Integer.parseInt(tokens[4]);
+                        C2 = Integer.parseInt(tokens[5]);
+                    }
+                } else {
+                    String[] tokens = valueStr.split(",");
+                    if (tokens.length == 6) {
+                        N1 = Integer.parseInt(tokens[0]);
+                        N2 = Integer.parseInt(tokens[1]);
+                        N3 = Integer.parseInt(tokens[2]);
                     }
                 }
-
-                String probabilityResult = computeProbability(C0, C1, C2, N1, N2, N3);
-                context.write(key, new Text(probabilityResult));
+                counter ++ ;
             }
 
-            private String computeProbability(int C0, int C1, int C2, int N1, int N2, int N3) {
 
-                if(C0 == 0 )
-                    throw new IllegalArgumentException("C0 must be non-zero.");
-
-
-                if (C1 == 0)
-                    throw new IllegalArgumentException("C1 must be non-zero.");
-
-
-                if (C2 == 0)
-                    throw new IllegalArgumentException("C2 must be non-zero.");
-
-
-
-        /*
-                if (C0 == 0 || C1 == 0 || C2 == 0) {
-                    throw new IllegalArgumentException("C0, C1, and C2 must be non-zero.");
-                }
-
-         */
-
-                float k2 = (float) (Math.log(N2 + 1) + 1) / (float) (Math.log(N2 + 1) + 2);
-                float k3 = (float) (Math.log(N3 + 1) + 1) / (float) (Math.log(N3 + 1) + 2);
-
-                float term1 = k3 * (float) N3 / C2;
-                float term2 = (1 - k3) * k2 * (float) N2 / C1;
-                float term3 = (1 - k3) * (1 - k2) * (float) N1 / C0;
-
-                float probability = term1 + term2 + term3;
-
-                return String.valueOf(probability);
-            }
+            String probabilityResult = computeProbability(C0, C1, C2, N1, N2, N3);
+            context.write(key, new Text(probabilityResult));
         }
 
-    public static void main(String[] args) throws Exception {
+        private String computeProbability(int C0, int C1, int C2, int N1, int N2, int N3) {
 
+            if(C0 == 0 )
+                throw new IllegalArgumentException("C0 must be non-zero.");
+
+
+            if (C1 == 0)
+                throw new IllegalArgumentException("C1 must be non-zero.");
+
+
+            if (C2 == 0)
+                throw new IllegalArgumentException("C2 must be non-zero.");
+
+
+            double k2 = (double) (Math.log(N2 + 1) + 1) / (double) (Math.log(N2 + 1) + 2);
+            double k3 = (double) (Math.log(N3 + 1) + 1) / (double) (Math.log(N3 + 1) + 2);
+
+            double term1 = k3 * (float) N3 / C2;
+            double term2 = (1 - k3) * k2 * (float) N2 / C1;
+            double term3 = (1 - k3) * (1 - k2) * (float) N1 / C0;
+
+            double probability = term1 + term2 + term3;
+
+            return String.valueOf(probability);
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        System.out.println(" we are in the new Step4");
         System.out.println("[DEBUG] STEP 4 started!");
         System.out.println(args.length > 0 ? args[0] : "no args");
 
@@ -190,11 +247,13 @@ public class Step4 {
         Configuration conf = new Configuration();
 
         Job job = Job.getInstance(conf, "step4 Count");
-        job.setJarByClass(Step4.class);
+        job.setJarByClass(Step4Google.class);
 
-        job.setMapperClass(Step4.MapperClass.class);     // mapper
-        job.setPartitionerClass(Step4.PartitionerClass.class);  // partitioner
-        job.setReducerClass(Step4.ReducerClass.class);          // reducer
+        job.setMapperClass(Step4Google.MapperClass.class);     // mapper
+        job.setPartitionerClass(Step4Google.PartitionerClass.class);  // partitioner
+        job.setReducerClass(Step4Google.ReducerClass.class);          // reducer
+      //  job.setCombinerClass(ReducerClass.class); // Use reducer as combiner if you need it
+
 
         // Set output key/value types for the Mapper output
         job.setMapOutputKeyClass(Text.class);  // Mapper outputs NGramCompositeKey
