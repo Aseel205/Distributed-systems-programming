@@ -94,16 +94,16 @@ public class ExampleApp {
 
         System.out.println("[INFO] Setting up job flow");
         RunJobFlowRequest runFlowRequest = new RunJobFlowRequest()
-                .withName( "ExampleApp")
+                .withName( "ExampleApp with 30 lines input without combiner")
                 .withInstances(instances)
          //        .withSteps(stepConfig1)
                 //     .withSteps (stepConfig2)
                 //     .withSteps(stepConfig3)
                 //    .withSteps(stepConfig4)
-                     .withSteps(stepConfig5)
+                //     .withSteps(stepConfig5)
 
 
-//                .withSteps(stepConfig1, stepConfig2, stepConfig3, stepConfig4)
+                 .withSteps(stepConfig1, stepConfig2, stepConfig3, stepConfig4 , stepConfig5)
 
                 .withLogUri("s3://" + bucketForJars + "/logs/")
                 .withServiceRole("EMR_DefaultRole")

@@ -1,6 +1,30 @@
-שלום עולם פה	2025	5	3
-היום טוב מאוד	2024	8	7
-תל אביב יפה מאוד	2023	10	12
-אני אוהב ללמוד	2025	4	2
-החיים יפים ונפלאים	2022	6	5
-הספר נמצא על השולחן	2024	7	6
+the quick brown   1850    12  3   2
+brown fox jumps   1850    15  4   3
+jumps over lazy   1850    10  2   1
+over the moon     1851    20  5   4
+the lazy dog      1852    8   3   2
+quick brown fox   1853    14  6   4
+brown fox over    1853    9   4   2
+lazy dog sleeps   1854    7   2   1
+fox jumps high    1855    11  3   3
+jumps high above  1855    6   2   1
+the small bird    1856    19  4   3
+small bird flies  1856    8   3   1
+flies above clouds    1857    12  5   3
+above clouds wide     1858    9   2   2
+dog sleeps soundly    1859    13  4   3
+soundly on bed    1860    8   3   1
+the bright sun    1861    16  5   4
+bright sun rises  1862    20  6   5
+sun rises early   1863    15  4   3
+early in morning  1864    9   3   2
+morning dew glistens   1865    6   2   1
+dew glistens brightly  1866    14  5   3
+glistens on grass 1867    11  4   3
+on grass field    1868    13  3   2
+grass field grows 1869    10  2   1
+field grows tall  1870    7   3   1
+grows tall trees  1871    12  4   2
+tall trees sway   1872    14  5   3
+trees sway gently 1873    9   3   2
+gently in wind    1874    16  6   4

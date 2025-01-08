@@ -22,7 +22,7 @@ public class googleApp {
     public static AmazonEC2 ec2;
     public static AmazonElasticMapReduce emr;
     public static String bucketForJars = "jars123123123";
-    public static int numberOfInstances = 5;
+    public static int numberOfInstances = 7;
 
     // inputs
     private static String googleBooks3Gram_link= "s3://datasets.elasticmapreduce/ngrams/books/20090715/heb-all/3gram/data";
@@ -98,10 +98,9 @@ public class googleApp {
 
         System.out.println("[INFO] Setting up job flow");
         RunJobFlowRequest runFlowRequest = new RunJobFlowRequest()
-                .withName( "googleApp  (without combiner with step 5)")
+                .withName( "google3gram run_withoutCombiner_with 7 instances")
                 .withInstances(instances)
-                .withSteps(stepConfig5)
-              //  .withSteps(stepConfig1, stepConfig2, stepConfig3, stepConfig4,stepConfig5)
+                .withSteps(stepConfig1, stepConfig2, stepConfig3, stepConfig4,stepConfig5)
 
                 .withLogUri("s3://" + bucketForJars + "/logs/")
                 .withServiceRole("EMR_DefaultRole")
