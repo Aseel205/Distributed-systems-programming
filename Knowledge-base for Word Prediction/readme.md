@@ -58,6 +58,7 @@ Running the project is straightforward. Inside the App folder, you'll find two f
       - Number of Mappers: 7
          - Run Time: 5 minutes.
 
+---
 
   ## Word Pair Analysis
 
@@ -81,6 +82,7 @@ Running the project is straightforward. Inside the App folder, you'll find two f
     - במלחמת העולם השניה	0.152
     - במלחמת העולם האחרונה	0.004
     - במלחמת העולם הקודמת	0.002
+
 **3.  Word Pair: אברהם אבן**
 
 - Top-5 Next Words:
