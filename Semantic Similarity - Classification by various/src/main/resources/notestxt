@@ -1,0 +1,4 @@
+1. when we count L , should we count all the lexems or just the lexems  in the file
+2 : when we count F should we count all the features or the features in the file , and the features should be connected to the root or not by an edge ..?
+3 : the lexemes should be just the root .. ?
+we should implement feature to index function ..
