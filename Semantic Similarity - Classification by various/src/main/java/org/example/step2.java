@@ -1,20 +1,24 @@
 package org.example;
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.S3Object;
+
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 
@@ -23,26 +27,35 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-import java.util.HashSet;
-
 
 public class step2 {
 
     public static class MapperClass extends Mapper<LongWritable, Text, Text, Text> {
 
         private HashSet<String> Lexems = new HashSet<>();
-        private HashSet<String> Features = new HashSet<>();
-        private Stemmer stemmer  ;
-
+        private Hashtable<String, Integer> FeatureTable = new Hashtable<>(); // Hashtable for feature indices
+        private Stemmer stemmer;
+        private String featuresFile_path = "s3://aseelhamzahw3/input files/features.txt";
+        private String lexemesFile_path = "s3://aseelhamzahw3/input files/lexemes.txt";
 
         @Override
         protected void setup(Context context) throws IOException, InterruptedException {
             super.setup(context);
 
-            // Load lexemes from lexemes.txt
-            Path lexemePath = new Path("src/main/resources/lexemes.txt");
-            FileSystem fs = FileSystem.get(context.getConfiguration());
-            BufferedReader lexemeReader = new BufferedReader(new InputStreamReader(fs.open(lexemePath)));
+            // Set up S3 client
+            AmazonS3 s3Client = AmazonS3ClientBuilder.standard().build();
+
+            // Extract bucket and key from the featuresFile_path URL
+            String featuresBucket = featuresFile_path.split("/")[2];
+            String featuresKey = featuresFile_path.substring(featuresFile_path.indexOf("/", 5) + 1);
+
+            // Extract bucket and key from the lexemesFile_path URL
+            String lexemesBucket = lexemesFile_path.split("/")[2];
+            String lexemesKey = lexemesFile_path.substring(lexemesFile_path.indexOf("/", 5) + 1);
+
+            // Load lexemes from lexemes.txt (from S3)
+            S3Object lexemesS3Object = s3Client.getObject(lexemesBucket, lexemesKey);
+            BufferedReader lexemeReader = new BufferedReader(new InputStreamReader(lexemesS3Object.getObjectContent()));
 
             String line;
             while ((line = lexemeReader.readLine()) != null) {
@@ -50,62 +63,65 @@ public class step2 {
             }
             lexemeReader.close();
 
-            // Load features from features.txt
-            Path featurePath = new Path("src/main/resources/features.txt");
-            BufferedReader featureReader = new BufferedReader(new InputStreamReader(fs.open(featurePath)));
+            // Load features from features.txt (from S3) and populate FeatureTable
+            S3Object featuresS3Object = s3Client.getObject(featuresBucket, featuresKey);
+            BufferedReader featureReader = new BufferedReader(new InputStreamReader(featuresS3Object.getObjectContent()));
 
+            int index = 0; // Start indexing from 0
+            List<String> sortedFeatures = new ArrayList<>(); // Temporary list to sort features
             while ((line = featureReader.readLine()) != null) {
-                Features.add(line.trim());
+                sortedFeatures.add(line.trim());
             }
             featureReader.close();
+
+            // Sort features alphabetically and assign indices
+            Collections.sort(sortedFeatures);
+            for (String feature : sortedFeatures) {
+                FeatureTable.put(feature, index++);
+            }
         }
 
-            // to do implement this function
+        // Returns the index of a feature from FeatureTable
         protected int featureToIndex(String feature) {
-            return feature.hashCode();  // Example: Using hashCode for simplicity
-        }
-
-        protected String IndexToFeature(int index) {
-            return  index + ""  ;
+            return FeatureTable.getOrDefault(feature, -1); // Return -1 if the feature is not found
         }
 
 
-
-        @Override
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            // Split the input line into fields
-            String[] parts = value.toString().split("\t");
+            // Split the input line by tab
+            String[] parts = value.toString().split("\t", -1); // Use -1 to preserve all fields, even empty ones
             if (parts.length < 4) return; // Ensure valid format
 
-            String rootWord = parts[0];  // The head_word (root lexeme)
-            String syntacticNgram = parts[1];  // The syntactic-ngram field
-            int totalCount;
+            String rootWord = parts[0].trim(); // The head_word (root lexeme)
+            String syntacticNgram = parts[1].trim(); // The syntactic-ngram field
+            int totalCount = Integer.parseInt(parts[2].trim()); // The total_count field
 
-            totalCount = Integer.parseInt(parts[2]);  // The total_count field
-
+            /*
             // Check if the root word is a lexeme
             if (!Lexems.contains(rootWord)) {
                 return;
             }
-
+*/
             // Process the syntactic-ngram field
             String[] tokens = syntacticNgram.split(" ");
             for (String token : tokens) {
                 String[] tokenParts = token.split("/"); // Extract word from the token
                 if (tokenParts.length < 4) continue; // Ensure valid token format
 
-                String featureWord = tokenParts[0];  // The actual word from the ngram
-                String posTag = tokenParts[1];  // POS tag (unused for now)
-                String depLabel = tokenParts[2];  // Dependency label (unused for now)
-                int headIndex = Integer.parseInt(tokenParts[3]);  // Head index
+                String featureWord = tokenParts[0].trim(); // The actual word from the ngram
+                String posTag = tokenParts[1].trim(); // POS tag (unused for now)
+                String depLabel = tokenParts[2].trim(); // Dependency label (unused for now)
+                int headIndex = Integer.parseInt(tokenParts[3].trim()); // Head index
 
                 // Apply the stemmer to the feature word
+                stemmer = new Stemmer();
                 stemmer.add(featureWord.toCharArray(), featureWord.length());
+                stemmer.stem();
                 String stemmedFeatureWord = stemmer.toString();
 
                 // Only consider features pointing to the root (headIndex == 1)
-                if (headIndex == 1 && Features.contains(stemmedFeatureWord +  " " + depLabel ) ) {
-                    int featureIndex = featureToIndex(stemmedFeatureWord + " " + depLabel );       // Aseel
+                if (FeatureTable.containsKey(stemmedFeatureWord + "-" + depLabel)) {
+                    int featureIndex = featureToIndex(stemmedFeatureWord + "-" + depLabel); // Fetch index from FeatureTable
 
                     // Emit <lexeme, h(feature)>, count
                     context.write(new Text(rootWord), new Text(featureIndex + "," + totalCount));
@@ -114,6 +130,7 @@ public class step2 {
         }
     }
 
+// ok what next ...?
 
     public static class ReducerClass extends Reducer<Text, Text, Text, Text> {
 
@@ -121,11 +138,6 @@ public class step2 {
         protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 
             int[] featureCounts = new int[1000];
-
-            // Initialize the feature counts array to zero
-            for (int i = 0; i < featureCounts.length; i++) {
-                featureCounts[i] = 0;
-            }
 
             // Process each value associated with the key
             for (Text value : values) {
@@ -177,10 +189,8 @@ public class step2 {
         job.setOutputKeyClass(Text.class);  // Final output key is Text
         job.setOutputValueClass(Text.class);  // Final output value is IntWritable
 
-        job.setInputFormatClass(SequenceFileInputFormat.class);
-        job.setOutputFormatClass(TextOutputFormat.class);
-        FileInputFormat.addInputPath(job, new Path(args[1]));
-     //   FileOutputFormat.setOutputPath(job, new Path("s3://aseelhamzahw3/hw3_output.txt") );
+        FileInputFormat.addInputPath(job, new Path("s3://aseelhamzahw3/input files/small input.txt"));
+        FileOutputFormat.setOutputPath(job, new Path("s3://aseelhamzahw3/outputs/step2 output.txt"));
 
 
 
