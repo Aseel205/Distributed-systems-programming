@@ -59,7 +59,7 @@ This project involves implementing and modifying an algorithm for semantic simil
 
 #### Technologies Used:
 - **MapReduce** for parallel processing.
-- **Python** for algorithm implementation and analysis.
+- **Java** for algorithm implementation and analysis.
 
 #### Setup:
 1. Read and understand the research paper on semantic similarity.
@@ -73,7 +73,6 @@ This project involves implementing and modifying an algorithm for semantic simil
 
 ### Requirements
 - **AWS Account**: Required to use AWS EC2, S3, and EMR for distributed processing.
-- **Python 3**: Required for local applications and data processing.
 - **MapReduce Framework**: Used for parallelization in the Hebrew Word-Prediction and Semantic Similarity projects.
 - **Libraries**: Additional Python libraries might be required depending on the specific project, such as `boto3` for AWS interactions.
 
