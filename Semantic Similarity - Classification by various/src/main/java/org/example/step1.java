@@ -15,7 +15,6 @@ import com.amazonaws.services.s3.model.S3Object;
 import java.util.HashSet;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 
 public class step1 {
@@ -96,7 +95,7 @@ public class step1 {
 
 
                 // we count the lexeme as lexeme and the feature as feature
-                if (Lexems.contains(stemmedFeatureWord)) {  // not only the root
+                if (Lexems.contains(stemmedFeatureWord)) {
                     context.write(new Text("L"), new Text(String.valueOf(totalCount))); // Count all lexemes
                     context.write(new Text("$ " + rootWord), new Text(String.valueOf(totalCount))); // Count specific lexeme
                 }
@@ -119,7 +118,7 @@ public class step1 {
         public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
             int sum = 0;
             for (Text value : values) {
-                sum += Integer.parseInt(value.toString());    // here is the error
+                sum += Integer.parseInt(value.toString());
             }
 
             context.write(key, new Text(sum + ""));

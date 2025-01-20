@@ -29,7 +29,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 
 public class step2 {
-
+                // I will do this with ameer   ...
     public static class MapperClass extends Mapper<LongWritable, Text, Text, Text> {
 
         private HashSet<String> Lexems = new HashSet<>();
@@ -120,7 +120,7 @@ public class step2 {
                 String stemmedFeatureWord = stemmer.toString();
 
                 // Only consider features pointing to the root (headIndex == 1)
-                if (FeatureTable.containsKey(stemmedFeatureWord + "-" + depLabel)) {
+                if (FeatureTable.containsKey(stemmedFeatureWord + "-" + depLabel)) {      //// and the index to the lexeme
                     int featureIndex = featureToIndex(stemmedFeatureWord + "-" + depLabel); // Fetch index from FeatureTable
 
                     // Emit <lexeme, h(feature)>, count
